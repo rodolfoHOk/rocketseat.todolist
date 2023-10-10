@@ -16,7 +16,7 @@ public class UserController {
   @PostMapping
   @ResponseStatus(code = HttpStatus.CREATED)
   public UserModel create(@RequestBody UserModel userModel) {
-    System.out.println(userModel);
+    System.out.println(userModel.getName());
     return userModel;
   }
 
