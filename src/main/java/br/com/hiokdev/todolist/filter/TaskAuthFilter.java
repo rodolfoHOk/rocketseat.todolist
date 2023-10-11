@@ -1,26 +1,60 @@
 package br.com.hiokdev.todolist.filter;
 
 import java.io.IOException;
+import java.util.Base64;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.Filter;
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import br.com.hiokdev.todolist.user.model.UserModel;
+import br.com.hiokdev.todolist.user.repository.IUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
-public class TaskAuthFilter implements Filter {
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class TaskAuthFilter extends OncePerRequestFilter {
+
+  private final IUserRepository userRepository;
 
   @Override
-  public void doFilter(
-    ServletRequest request,
-    ServletResponse response,
-    FilterChain chain
-  ) throws IOException, ServletException {
-    System.out.println("!!!Chegou no filtro!!!");
-    chain.doFilter(request, response);
+  protected void doFilterInternal(
+    HttpServletRequest request,
+    HttpServletResponse response,
+    FilterChain filterChain
+  ) throws ServletException, IOException {
+    String uri = request.getRequestURI();
+    
+    if (uri.contains("/tasks")) {
+      String authorization = request.getHeader("Authorization");
+      String authEncoded = authorization.substring("Basic".length()).trim();
+      byte[] authDecoded = Base64.getDecoder().decode(authEncoded);
+      String authString = new String(authDecoded);
+      String[] credentials = authString.split(":");
+      String username = credentials[0];
+      String password = credentials[1];
+
+      Optional<UserModel> existUser = userRepository.findByUsername(username);
+      if (existUser.isEmpty()) {
+        response.sendError(401);
+      } else {
+        var passwordVerify = BCrypt.verifyer()
+          .verify(password.toCharArray(), existUser.get().getPassword());
+        if (passwordVerify.verified) {
+          filterChain.doFilter(request, response);
+        } else {
+          response.sendError(401);
+        }
+      }
+    } else {
+      filterChain.doFilter(request, response);
+    }
   }
   
 }

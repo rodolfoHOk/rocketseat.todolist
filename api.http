@@ -6,14 +6,14 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-  "username": "RudolfHiOk",
+  "username": "rudolfhiok",
   "name": "Rodolfo HiOk",
   "password": "abc123"
 }
 
 ### Register task
 POST http://localhost:8080/tasks
-Authorization: Basic user:passwd
+Authorization: Basic rudolfhiok:abc123
 Content-Type: application/json
 
 {
