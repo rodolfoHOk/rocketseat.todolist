@@ -1,4 +1,4 @@
-package br.com.hiokdev.todolist.controller;
+package br.com.hiokdev.todolist.testing.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
