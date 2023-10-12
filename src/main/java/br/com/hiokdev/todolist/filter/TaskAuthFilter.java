@@ -47,6 +47,7 @@ public class TaskAuthFilter extends OncePerRequestFilter {
         var passwordVerify = BCrypt.verifyer()
           .verify(password.toCharArray(), existUser.get().getPassword());
         if (passwordVerify.verified) {
+          request.setAttribute("userId", existUser.get().getId());
           filterChain.doFilter(request, response);
         } else {
           response.sendError(401);
