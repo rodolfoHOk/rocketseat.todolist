@@ -29,16 +29,26 @@ GET http://localhost:8080/tasks
 Authorization: Basic rudolfhiok:abc123
 
 ### Update task
-PUT http://localhost:8080/tasks/b83877cb-c10e-445e-a369-62e8359e1f03
+PUT http://localhost:8080/tasks/4c3f388d-c752-4d88-b19f-e7f24d33e55b
 Authorization: Basic rudolfhiok:abc123
 Content-Type: application/json
 
 {
   "title": "Teste atualizar uma nova tarefa",
-  "description": "Descrição de teste para atualizar uma nova tarefa",
+  "description": "Descrição de teste para atualizar uma tarefa",
   "priority": "Alta",
   "startAt": "2023-10-13T09:30:00",
   "endAt": "2023-10-13T11:45:00"
+}
+
+### Partial update task
+PUT http://localhost:8080/tasks/4c3f388d-c752-4d88-b19f-e7f24d33e55b
+Authorization: Basic rudolfhiok:abc123
+Content-Type: application/json
+
+{
+  "description": "Descrição de teste para atualizar somente descrição e prioridade de uma tarefa",
+  "priority": "Média"
 }
 
 ### Register other user

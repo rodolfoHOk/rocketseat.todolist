@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.hiokdev.todolist.task.model.TaskModel;
 import br.com.hiokdev.todolist.task.repository.ITaskRepository;
+import br.com.hiokdev.todolist.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
@@ -59,17 +60,18 @@ public class TaskController {
     HttpServletRequest request  
   ) {
     var userId = request.getAttribute("userId");
-    Optional<TaskModel> existTask = taskRepository.findById(taskId);
-    if (existTask.isEmpty()) {
+    Optional<TaskModel> foundedTask = taskRepository.findById(taskId);
+    if (foundedTask.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
-    if (!existTask.get().getUserId().equals((UUID) userId)) {
+    TaskModel existTask = foundedTask.get();
+
+    if (!existTask.getUserId().equals((UUID) userId)) {
       return ResponseEntity.notFound().build();
     }
-    taskModel.setId(taskId);
-    taskModel.setUserId((UUID) userId);
-    taskModel.setCreatedAt(existTask.get().getCreatedAt());
-    var updatedTask = taskRepository.save(taskModel);
+
+    Utils.copyNonNullProperties(taskModel, existTask);
+    var updatedTask = taskRepository.save(existTask);
     return ResponseEntity.ok().body(updatedTask);
   }
 
