@@ -1,11 +1,16 @@
 package br.com.hiokdev.todolist.task.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +44,33 @@ public class TaskController {
     
     var taskCreated = taskRepository.save(taskModel);
     return ResponseEntity.ok().body(taskCreated);
+  }
+
+  @GetMapping
+  private List<TaskModel> list(HttpServletRequest request) {
+    var userId = request.getAttribute("userId");
+    return taskRepository.findByUserId((UUID) userId);
+  }
+
+  @PutMapping("/{taskId}")
+  private ResponseEntity<?> update(
+    @PathVariable UUID taskId,
+    @RequestBody TaskModel taskModel,
+    HttpServletRequest request  
+  ) {
+    var userId = request.getAttribute("userId");
+    Optional<TaskModel> existTask = taskRepository.findById(taskId);
+    if (existTask.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    if (!existTask.get().getUserId().equals((UUID) userId)) {
+      return ResponseEntity.notFound().build();
+    }
+    taskModel.setId(taskId);
+    taskModel.setUserId((UUID) userId);
+    taskModel.setCreatedAt(existTask.get().getCreatedAt());
+    var updatedTask = taskRepository.save(taskModel);
+    return ResponseEntity.ok().body(updatedTask);
   }
 
 }
