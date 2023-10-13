@@ -8,8 +8,10 @@ COPY . .
 RUN apt-get install maven -y
 RUN mvn clean install
 
-EXPOSE 8080
+FROM openjdk:21-jdk-slim
 
 COPY --from=BUILDER /target/todolist-1.0.0.jar app.jar
+
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
