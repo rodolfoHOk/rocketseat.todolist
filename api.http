@@ -20,8 +20,8 @@ Content-Type: application/json
   "title": "Teste criar uma nova tarefa",
   "description": "Descrição de teste para criar uma nova tarefa",
   "priority": "Alta",
-  "startAt": "2023-10-13T09:30:00",
-  "endAt": "2023-10-13T11:45:00"
+  "startAt": "2023-10-14T09:30:00",
+  "endAt": "2023-10-14T11:45:00"
 }
 
 ### List tasks
@@ -37,8 +37,8 @@ Content-Type: application/json
   "title": "Teste atualizar uma nova tarefa",
   "description": "Descrição de teste para atualizar uma tarefa",
   "priority": "Alta",
-  "startAt": "2023-10-13T09:30:00",
-  "endAt": "2023-10-13T11:45:00"
+  "startAt": "2023-10-14T09:30:00",
+  "endAt": "2023-10-14T11:45:00"
 }
 
 ### Partial update task
@@ -49,6 +49,19 @@ Content-Type: application/json
 {
   "description": "Descrição de teste para atualizar somente descrição e prioridade de uma tarefa",
   "priority": "Média"
+}
+
+### Register task with more than 50 char in title
+POST http://localhost:8080/tasks
+Authorization: Basic rudolfhiok:abc123
+Content-Type: application/json
+
+{
+  "title": "Teste criar uma nova tarefa com mais de 50 caracteres 1234567890 abcdefghijklmnopqrstuvwxyz",
+  "description": "Descrição de teste para criar uma nova tarefa",
+  "priority": "Alta",
+  "startAt": "2023-10-14T09:30:00",
+  "endAt": "2023-10-14T11:45:00"
 }
 
 ### Register other user
@@ -70,8 +83,8 @@ Content-Type: application/json
   "title": "Teste criar uma nova tarefa",
   "description": "Descrição de teste para criar uma nova tarefa",
   "priority": "Alta",
-  "startAt": "2023-10-13T09:30:00",
-  "endAt": "2023-10-13T11:45:00"
+  "startAt": "2023-10-14T09:30:00",
+  "endAt": "2023-10-14T11:45:00"
 }
 
 ### List tasks for other user

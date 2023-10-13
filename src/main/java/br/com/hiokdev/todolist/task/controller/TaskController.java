@@ -60,14 +60,15 @@ public class TaskController {
     HttpServletRequest request  
   ) {
     var userId = request.getAttribute("userId");
+
     Optional<TaskModel> foundedTask = taskRepository.findById(taskId);
     if (foundedTask.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
-    TaskModel existTask = foundedTask.get();
 
+    TaskModel existTask = foundedTask.get();
     if (!existTask.getUserId().equals((UUID) userId)) {
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.badRequest().body("Usuário não tem permissão para alterar esta tarefa.");
     }
 
     Utils.copyNonNullProperties(taskModel, existTask);
