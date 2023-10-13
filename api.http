@@ -90,3 +90,55 @@ Content-Type: application/json
 ### List tasks for other user
 GET http://localhost:8080/tasks
 Authorization: Basic testuser:123456
+
+### Deployed
+
+### Register user
+POST https://rocketseat-todolist.onrender.com/users
+Content-Type: application/json
+
+{
+  "username": "rudolfhiok",
+  "name": "Rodolfo HiOk",
+  "password": "abc123"
+}
+
+### Register task
+POST https://rocketseat-todolist.onrender.com/tasks
+Authorization: Basic rudolfhiok:abc123
+Content-Type: application/json
+
+{
+  "title": "Teste criar uma nova tarefa",
+  "description": "Descrição de teste para criar uma nova tarefa",
+  "priority": "Alta",
+  "startAt": "2023-10-14T09:30:00",
+  "endAt": "2023-10-14T11:45:00"
+}
+
+### List tasks
+GET https://rocketseat-todolist.onrender.com/tasks
+Authorization: Basic rudolfhiok:abc123
+
+### Update task
+PUT https://rocketseat-todolist.onrender.com/tasks/a3d44a3b-de3e-47a3-bcbb-a51fb86abaf7
+Authorization: Basic rudolfhiok:abc123
+Content-Type: application/json
+
+{
+  "title": "Teste atualizar uma nova tarefa",
+  "description": "Descrição de teste para atualizar uma tarefa",
+  "priority": "Alta",
+  "startAt": "2023-10-14T09:30:00",
+  "endAt": "2023-10-14T11:45:00"
+}
+
+### Partial update task
+PUT https://rocketseat-todolist.onrender.com/tasks/a3d44a3b-de3e-47a3-bcbb-a51fb86abaf7
+Authorization: Basic rudolfhiok:abc123
+Content-Type: application/json
+
+{
+  "description": "Descrição de teste para atualizar somente descrição e prioridade de uma tarefa",
+  "priority": "Média"
+}
